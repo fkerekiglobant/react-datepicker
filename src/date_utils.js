@@ -212,7 +212,30 @@ export function getWeek(date, locale) {
   let localeObj =
     (locale && getLocaleObject(locale)) ||
     (getDefaultLocale() && getLocaleObject(getDefaultLocale()));
-  return getISOWeek(date, localeObj ? { locale: localeObj } : null);
+  //  return getISOWeek(date, localeObj ? { locale: localeObj } : null);
+
+  /*
+    Assumption: the day of the incoming date is to be considered the first day of the week
+    Assumption: we ignore the locale; we work with the incoming date
+
+    If December 29, 30, or 31, return 1
+    If not, jump back week by week, counting jumps, until the year changes
+    If we landed on December 29, 30 or 31, return jumps + 1
+    Otherwise, return jumps
+  */
+  let yyyymmdd = new Date(date);
+  if (getMonth(yyyymmdd) === 11 && getDate(yyyymmdd) > 28) {
+    return 1;
+  } else {
+    const yyyy = getYear(yyyymmdd);
+    let jumps = 0;
+    const WEEKJUMP = 7 * 24 * 60 * 60 * 1000;
+    do {
+      yyyymmdd -= WEEKJUMP;
+      jumps++;
+    } while (getYear(yyyymmdd) === yyyy);
+    return getDate(yyyymmdd) < 29 ? jumps : jumps + 1;
+  }
 }
 
 export function getDayOfWeekCode(day, locale) {
