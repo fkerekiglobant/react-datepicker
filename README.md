@@ -16,7 +16,7 @@ A simple and reusable Datepicker component for React ([Demo](https://reactdatepi
 The package can be installed via [npm](https://github.com/npm/cli):
 
 ```
-npm install react-datepicker --save
+npm install fkerekiglobant/react-datepicker --save
 ```
 
 Or via [yarn](https://github.com/yarnpkg/yarn):
